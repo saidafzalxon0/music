@@ -22,6 +22,5 @@ public class PartnerDto {
     @Size(min = 1,max = 255,message = AppStatusMessage.SIZE_MISMATCH)
     private String link;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
 }

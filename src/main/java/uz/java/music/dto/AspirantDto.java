@@ -26,6 +26,5 @@ public class AspirantDto {
     private Position position;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
 }
