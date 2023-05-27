@@ -23,24 +23,24 @@ public class ExceptionHandlerRest {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(AdminDuplicate.class)
-    public ResponseEntity<Map<String,String>> handleBusinessException(AdminDuplicate e){
+    @ExceptionHandler(Duplicate.class)
+    public ResponseEntity<Map<String,String>> handleBusinessException(Duplicate e){
         Map<String,String> map =  new HashMap<>();
         map.put("errorMessage",e.getMessage());
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(AdminNotFound.class)
-    public ResponseEntity<Map<String,String>> handleBusinessException(AdminNotFound e){
+    @ExceptionHandler(NotFound.class)
+    public ResponseEntity<Map<String,String>> handleBusinessException(NotFound e){
         Map<String,String> map =  new HashMap<>();
         map.put("errorMessage",e.getMessage());
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(AdminNotSaved.class)
-    public ResponseEntity<Map<String,String>> handleBusinessException(AdminNotSaved e){
+    @ExceptionHandler(NotSaved.class)
+    public ResponseEntity<Map<String,String>> handleBusinessException(NotSaved e){
         Map<String,String> map =  new HashMap<>();
         map.put("errorMessage",e.getMessage());
         return new ResponseEntity<>(map,HttpStatus.BAD_REQUEST);
