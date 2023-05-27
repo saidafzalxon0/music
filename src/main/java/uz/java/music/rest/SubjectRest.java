@@ -32,6 +32,7 @@ public class SubjectRest {
     }
 
     @DeleteMapping("/{id}")
+
     public ResponseEntity<SubjectDto> delete(@PathVariable Long id){
         return service.deleteSubject(id);
     }

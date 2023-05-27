@@ -2,19 +2,13 @@ package uz.java.music.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
 import uz.java.music.dto.DirectionDto;
-import uz.java.music.dto.SubjectDto;
 import uz.java.music.entity.Direction;
-import uz.java.music.entity.Subject;
-import uz.java.music.mapper.DirectionMapper;
+import uz.java.music.service.mapper.DirectionMapper;
 import uz.java.music.repository.DirectionRepository;
 import uz.java.music.service.DirectionService;
-import uz.java.music.status.AppStatusMessage;
 
 import java.util.List;
 import java.util.Optional;

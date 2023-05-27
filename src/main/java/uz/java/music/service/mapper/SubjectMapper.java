@@ -1,4 +1,4 @@
-package uz.java.music.mapper;
+package uz.java.music.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;

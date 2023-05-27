@@ -1,4 +1,4 @@
-package uz.java.music.mapper;
+package uz.java.music.service.mapper;
 
 public interface CommonMapper<D, E> {
     D toDto(E e);
