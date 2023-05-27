@@ -31,7 +31,7 @@ public class ExceptionHandlerRest {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler(AdminNotFound.class)
+    @ExceptionHandler(AdminNotFound.class)
     public ResponseEntity<Map<String,String>> handleBusinessException(AdminNotFound e){
         Map<String,String> map =  new HashMap<>();
         map.put("errorMessage",e.getMessage());
