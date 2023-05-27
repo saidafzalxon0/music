@@ -2,6 +2,7 @@ package uz.java.music.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.java.music.dto.SubjectDto;
@@ -23,7 +24,7 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
 
     @Override
-    public ResponseEntity<?> createSubject(SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto) {
         Subject subject = subjectMapper.toEntity(subjectDto);
         try {
             Subject subjectSave = subjectRepository.save(subject);
@@ -31,40 +32,40 @@ public class SubjectServiceImpl implements SubjectService {
             return ResponseEntity.ok(subjectMapper.toDto(subjectSave));
         } catch (Exception e) {
             log.error("Subject don't added {}", e.getMessage());
-            return ResponseEntity.ok(e.getMessage());
+            throw new NullPointerException("Subject don't added ");
         }
     }
 
     @Override
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<SubjectDto>> getAll() {
         List<SubjectDto> subjectList = subjectRepository.findAll().stream().map(subjectMapper::toDto).toList();
         return ResponseEntity.ok(subjectList);
     }
 
     @Override
-    public ResponseEntity<?> getSubjectById(Integer subject_id) {
+    public ResponseEntity<SubjectDto> getSubjectById(Long subject_id) {
         if (subject_id == null) {
-            return ResponseEntity.badRequest().body(AppStatusMessage.NULL_VALUE);
+            throw new NullPointerException("Id is null");
         }
         Optional<Subject> byId = subjectRepository.findById(subject_id);
         if (byId.isEmpty()) {
-            return ResponseEntity.ok(AppStatusMessage.NOT_FOUND);
+            throw new NullPointerException("Id is empty");
         }
         try {
             return ResponseEntity.ok(subjectMapper.toDto(byId.get()));
         } catch (Exception e){
-        return ResponseEntity.ok(e.getMessage());
+            throw new NullPointerException("Id is not available");
         }
     }
 
     @Override
-    public ResponseEntity<?> editSubject(SubjectDto subjectDto) {
+    public ResponseEntity<SubjectDto> editSubject(SubjectDto subjectDto) {
         if (subjectDto.getId() == null) {
-            return ResponseEntity.badRequest().body("Subject id is null");
+            throw new NullPointerException("Id is null");
         }
-        Optional<Subject> byId = subjectRepository.findById(Math.toIntExact(subjectDto.getId()));
+        Optional<Subject> byId = subjectRepository.findById((subjectDto.getId()));
         if (byId.isEmpty()){
-            return ResponseEntity.ok("Subject not found");
+            throw new NullPointerException("Id is empty");
         }
         try{
             Subject editSubject = byId.get();
@@ -74,27 +75,27 @@ public class SubjectServiceImpl implements SubjectService {
             subjectRepository.save(editSubject);
             return ResponseEntity.ok(subjectMapper.toDto(editSubject));
         }catch (Exception e) {
-            return ResponseEntity.ok(e.getMessage());
+            throw new NullPointerException("Subject has not been updated");
         }
     }
 
     @Override
-    public ResponseEntity<?> deleteSubject(Integer subject_id) {
+    public ResponseEntity<SubjectDto> deleteSubject(Long subject_id) {
         if (subject_id == null) {
             log.error("Subject has not been deleted null value");
-            return ResponseEntity.badRequest().body("Null value");
+            throw new NullPointerException("Id is null");
         }
         Optional<Subject> byId = subjectRepository.findById(subject_id);
         if (byId.isEmpty()) {
             log.info("not found id delete subject");
-            return ResponseEntity.ok("Not found");
+            throw new NullPointerException("Id is not found");
         }
         try {
             subjectRepository.delete(byId.get());
             log.info("Subject has been deleted {} ", subject_id);
-            return ResponseEntity.ok(true);
-        } catch (Exception e) {
-            return ResponseEntity.ok(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } catch (NullPointerException e) {
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

@@ -3,12 +3,14 @@ package uz.java.music.service;
 import org.springframework.http.ResponseEntity;
 import uz.java.music.dto.SubjectDto;
 
-public interface SubjectService {
-    ResponseEntity<?> createSubject(SubjectDto subjectDto);
-    ResponseEntity<?> getAll();
-    ResponseEntity<?> getSubjectById(Integer subject_id);
+import java.util.List;
 
-    ResponseEntity<?> editSubject(SubjectDto subjectDto);
-    ResponseEntity<?> deleteSubject(Integer subject_id);
+public interface SubjectService {
+    ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto);
+    ResponseEntity<List<SubjectDto>> getAll();
+    ResponseEntity<SubjectDto> getSubjectById(Long subject_id);
+
+    ResponseEntity<SubjectDto> editSubject(SubjectDto subjectDto);
+    ResponseEntity<SubjectDto> deleteSubject(Long subject_id);
 
 }
