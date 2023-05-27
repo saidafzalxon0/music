@@ -30,6 +30,5 @@ public class NewDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime date;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
 }

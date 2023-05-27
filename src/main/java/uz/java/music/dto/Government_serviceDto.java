@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import uz.java.music.entity.File;
 import uz.java.music.status.AppStatusMessage;
 import lombok.Getter;
@@ -22,7 +24,6 @@ public class Government_serviceDto{
     @Size(min = 1,max = 255,message = AppStatusMessage.SIZE_MISMATCH)
     private String link;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
 
 

@@ -1,5 +1,6 @@
 package uz.java.music.service.impl;
 
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
@@ -33,6 +34,8 @@ public class Government_serviceServiceImpl implements Government_serviceService 
             return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(serviceDto))), HttpStatus.CREATED);
         }catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Government service not saved");
+        }catch (DataIntegrityViolationException e){
+            throw new NotSaved("File id not found");
         }
     }
 
@@ -42,6 +45,7 @@ public class Government_serviceServiceImpl implements Government_serviceService 
                 throw new NotFound("Government service is not found");
             }else {
                 if (repository.findById(serviceDto.getId()).isPresent()) {
+                    //TODO file servise tekshirish qo'shish kerak.
                     return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(serviceDto))), HttpStatus.OK);
                 } else {
                     throw new NotSaved("Government service not updated");
