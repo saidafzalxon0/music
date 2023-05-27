@@ -3,6 +3,7 @@ package uz.java.music.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubjectDto {
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
+    @Null
     private Long id;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)

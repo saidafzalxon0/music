@@ -10,7 +10,6 @@ import uz.java.music.status.AppStatusMessage;
 @Getter
 @Setter
 public class PartnerDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)

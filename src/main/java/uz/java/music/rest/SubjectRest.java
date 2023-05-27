@@ -27,7 +27,7 @@ public class SubjectRest {
     }
 
     @PatchMapping
-    public ResponseEntity<SubjectDto> update(@Valid @RequestBody SubjectDto subjectDto){
+    public ResponseEntity<SubjectDto> update(@RequestBody SubjectDto subjectDto){
         return service.editSubject(subjectDto);
     }
 

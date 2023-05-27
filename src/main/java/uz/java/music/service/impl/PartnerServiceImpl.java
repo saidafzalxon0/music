@@ -37,7 +37,7 @@ public class PartnerServiceImpl implements PartnerService {
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Partner not saved");
         }catch (DataIntegrityViolationException e){
-            throw new Duplicate("Partner already exists");
+            throw new Duplicate("Partner not found");
         }    }
 
     @Override
