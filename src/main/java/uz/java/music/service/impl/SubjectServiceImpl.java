@@ -7,10 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.java.music.dto.SubjectDto;
 import uz.java.music.entity.Subject;
-import uz.java.music.mapper.SubjectMapper;
+import uz.java.music.service.mapper.SubjectMapper;
 import uz.java.music.repository.SubjectRepository;
 import uz.java.music.service.SubjectService;
-import uz.java.music.status.AppStatusMessage;
 
 import java.util.List;
 import java.util.Optional;
