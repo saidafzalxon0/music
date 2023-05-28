@@ -1,19 +1,18 @@
-version: '3.1'
+version: '3'
 services:
-  app:
-    container_name: springboot-postgresql
-    image: springboot-postgresql
-    build: ./
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgresqldb
-  postgresqldb:
-    image: postgres
-    ports:
-      - "5433:5433"
+  postgres:
+    container_name: music_academy
+    image: postgres:15.1
+    restart: unless-stopped
     environment:
-      - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=music
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  pgdata:
 
