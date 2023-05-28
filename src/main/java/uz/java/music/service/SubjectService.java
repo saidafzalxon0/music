@@ -12,5 +12,4 @@ public interface SubjectService {
 
     ResponseEntity<SubjectDto> editSubject(SubjectDto subjectDto);
     ResponseEntity<SubjectDto> deleteSubject(Long subject_id);
-
 }

@@ -1,12 +1,19 @@
 package uz.java.music.service.impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uz.java.music.dto.SubjectDto;
+import uz.java.music.entity.Direction;
 import uz.java.music.entity.Subject;
+import uz.java.music.exception.Duplicate;
+import uz.java.music.exception.NotFound;
+import uz.java.music.exception.NotSaved;
 import uz.java.music.service.mapper.SubjectMapper;
 import uz.java.music.repository.SubjectRepository;
 import uz.java.music.service.SubjectService;
@@ -19,25 +26,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
-    private final SubjectMapper subjectMapper;
-    private final SubjectRepository subjectRepository;
+    private final SubjectMapper mapper;
+    private final SubjectRepository repository;
 
     @Override
     public ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto) {
-        Subject subject = subjectMapper.toEntity(subjectDto);
-        try {
-            Subject subjectSave = subjectRepository.save(subject);
-            log.info("Subject added {}", subject.getName());
-            return ResponseEntity.ok(subjectMapper.toDto(subjectSave));
-        } catch (Exception e) {
-            log.error("Subject don't added {}", e.getMessage());
-            throw new NullPointerException("Subject don't added ");
+        try{
+            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(subjectDto))), HttpStatus.CREATED);
+        }catch (InvalidDataAccessResourceUsageException e){
+            throw new NotSaved("Subject not saved");
+        }catch (DataIntegrityViolationException e){
+            throw new Duplicate("Subject already exists");
         }
     }
 
     @Override
     public ResponseEntity<List<SubjectDto>> getAll() {
-        List<SubjectDto> subjectList = subjectRepository.findAll().stream().map(subjectMapper::toDto).toList();
+        List<SubjectDto> subjectList = repository.findAll().stream().map(mapper::toDto).toList();
         return ResponseEntity.ok(subjectList);
     }
 
@@ -46,12 +51,12 @@ public class SubjectServiceImpl implements SubjectService {
         if (subject_id == null) {
             throw new NullPointerException("Id is null");
         }
-        Optional<Subject> byId = subjectRepository.findById(subject_id);
+        Optional<Subject> byId = repository.findById(subject_id);
         if (byId.isEmpty()) {
             throw new NullPointerException("Id is empty");
         }
         try {
-            return ResponseEntity.ok(subjectMapper.toDto(byId.get()));
+            return ResponseEntity.ok(mapper.toDto(byId.get()));
         } catch (Exception e){
             throw new NullPointerException("Id is not available");
         }
@@ -59,42 +64,30 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public ResponseEntity<SubjectDto> editSubject(SubjectDto subjectDto) {
-        if (subjectDto.getId() == null) {
-            throw new NullPointerException("Id is null");
-        }
-        Optional<Subject> byId = subjectRepository.findById((subjectDto.getId()));
-        if (byId.isEmpty()){
-            throw new NullPointerException("Id is empty");
-        }
-        try{
-            Subject editSubject = byId.get();
-            if (subjectDto.getName() != null){
-                    editSubject.setName(subjectDto.getName());
+        if(subjectDto.getId() == null){
+            throw new NotFound("Subject is not found");
+        }else {
+            if (repository.findById(subjectDto.getId()).isPresent()) {
+                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(subjectDto))), HttpStatus.OK);
+            }else {
+                throw new NotSaved("Subject has not been updated");
             }
-            subjectRepository.save(editSubject);
-            return ResponseEntity.ok(subjectMapper.toDto(editSubject));
-        }catch (Exception e) {
-            throw new NullPointerException("Subject has not been updated");
         }
     }
 
     @Override
+    @Transactional
     public ResponseEntity<SubjectDto> deleteSubject(Long subject_id) {
-        if (subject_id == null) {
-            log.error("Subject has not been deleted null value");
-            throw new NullPointerException("Id is null");
-        }
-        Optional<Subject> byId = subjectRepository.findById(subject_id);
-        if (byId.isEmpty()) {
-            log.info("not found id delete subject");
-            throw new NullPointerException("Id is not found");
-        }
-        try {
-            subjectRepository.delete(byId.get());
-            log.info("Subject has been deleted {} ", subject_id);
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        } catch (NullPointerException e) {
-            throw new RuntimeException(e.getMessage());
+        Optional<Subject> subject = repository.findById(subject_id);
+        if(subject.isPresent()){
+            try{
+                repository.deleteSubject(subject_id);
+                return new ResponseEntity<>(mapper.toDto(subject.get()),HttpStatus.OK);
+            }catch (Exception e){
+                throw new NotSaved("Subject has not been deleted");
+            }
+        }else{
+            throw new NotFound("Subject is not found");
         }
     }
 }

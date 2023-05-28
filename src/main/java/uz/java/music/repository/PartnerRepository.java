@@ -10,6 +10,6 @@ import uz.java.music.entity.Partner;
 @Repository
 public interface PartnerRepository extends JpaRepository<Partner, Long> {
     @Modifying
-    @Query("DELETE FROM Partner a WHERE a.id = :id")
+    @Query("DELETE FROM Partner p WHERE p.id = :id")
     void deletePartner(@Param("id") Long id);
 }

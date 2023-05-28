@@ -10,11 +10,8 @@ import uz.java.music.service.SubjectService;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/subject")
-public class SubjectRest {
-
-    private final SubjectService service;
+public record SubjectRest(SubjectService service) {
 
     @GetMapping
     public ResponseEntity<List<SubjectDto>> getAllSubject(){

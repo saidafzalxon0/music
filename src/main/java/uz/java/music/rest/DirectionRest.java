@@ -11,11 +11,9 @@ import uz.java.music.service.DirectionService;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("direction")
-public class DirectionRest {
+public record DirectionRest(DirectionService service) {
 
-    private final DirectionService service;
     @GetMapping
     public ResponseEntity<List<DirectionDto>> getAllSubject(){
         return service.getAll();
