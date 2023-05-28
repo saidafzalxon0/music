@@ -3,6 +3,7 @@ package uz.java.music.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class Event{
     @Column(name = "body",nullable = false,length = 10000)
     private String body;
 
+    @CreatedDate
     @Column(name = "date",nullable = false)
     private LocalDateTime date;
 

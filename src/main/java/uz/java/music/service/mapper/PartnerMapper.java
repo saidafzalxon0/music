@@ -7,5 +7,5 @@ import uz.java.music.entity.Partner;
 
 @Component
 @Mapper(componentModel = "spring")
-public abstract class PartnerMapper implements CommonMapper<PartnerDto, Partner>{
+public interface PartnerMapper extends CommonMapper<PartnerDto, Partner>{
 }

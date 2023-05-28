@@ -2,10 +2,10 @@ package uz.java.music.service.mapper;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
-import uz.java.music.dto.SubjectDto;
-import uz.java.music.entity.Subject;
+import uz.java.music.dto.EventDto;
+import uz.java.music.entity.Event;
 
 @Component
 @Mapper(componentModel = "spring")
-public interface SubjectMapper extends CommonMapper<SubjectDto, Subject> {
+public interface EventMapper extends CommonMapper<EventDto, Event>{
 }

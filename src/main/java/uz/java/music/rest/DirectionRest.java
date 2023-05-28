@@ -25,7 +25,7 @@ public record DirectionRest(DirectionService service) {
     }
 
     @PatchMapping
-    public ResponseEntity<DirectionDto> update(@Valid @RequestBody DirectionDto directionDto){
+    public ResponseEntity<DirectionDto> update( @RequestBody DirectionDto directionDto){
         return service.edit(directionDto);
     }
 

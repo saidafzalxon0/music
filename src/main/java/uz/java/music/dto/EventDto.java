@@ -25,21 +25,26 @@ public class EventDto {
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 1,max = 10000,message = AppStatusMessage.SIZE_MISMATCH)
     private String body;
+
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private LocalDateTime date;
+
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 5,max = 5,message = AppStatusMessage.SIZE_MISMATCH)
-    private String start_date;
+    private String startTime;
+
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 5,max = 5,message = AppStatusMessage.SIZE_MISMATCH)
-    private String end_date;
+    private String endTime;
+
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 1,max = 500,message = AppStatusMessage.SIZE_MISMATCH)
     private String location;
+
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
