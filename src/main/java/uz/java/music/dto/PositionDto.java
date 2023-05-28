@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PositionDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+
     private Long id;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
