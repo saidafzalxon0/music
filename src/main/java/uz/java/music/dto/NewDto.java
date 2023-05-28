@@ -9,11 +9,11 @@ import uz.java.music.entity.File;
 import uz.java.music.status.AppStatusMessage;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 public class NewDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
@@ -27,8 +27,7 @@ public class NewDto {
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 1,max = 5000,message = AppStatusMessage.SIZE_MISMATCH)
     private String who_from;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime date;
+    private Date date;
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     private File file;
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -26,7 +27,7 @@ public class New {
     private String who_from;
 
     @Column(name = "date",nullable = false)
-    private LocalDateTime date;
+    private Date date;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "file_id",nullable = false,unique = true)
