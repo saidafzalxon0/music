@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -23,9 +23,8 @@ public class Event{
     @Column(name = "body",nullable = false,length = 10000)
     private String body;
 
-    @CreatedDate
     @Column(name = "date",nullable = false)
-    private LocalDateTime date;
+    private Date date;
 
     @Column(name = "start_time",nullable = false,length = 5)
     private String start_time;

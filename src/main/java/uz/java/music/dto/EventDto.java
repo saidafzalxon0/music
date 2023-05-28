@@ -8,12 +8,11 @@ import lombok.Setter;
 import uz.java.music.entity.File;
 import uz.java.music.status.AppStatusMessage;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 public class EventDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
@@ -27,18 +26,17 @@ public class EventDto {
     private String body;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
-    private LocalDateTime date;
+    private Date date;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 5,max = 5,message = AppStatusMessage.SIZE_MISMATCH)
-    private String startTime;
+    private String start_time;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     @Size(min = 5,max = 5,message = AppStatusMessage.SIZE_MISMATCH)
-    private String endTime;
+    private String end_time;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
     @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
@@ -46,6 +44,5 @@ public class EventDto {
     private String location;
 
     @NotNull(message = AppStatusMessage.NULL_VALUE)
-    @NotEmpty(message = AppStatusMessage.EMPTY_STRING)
     private File file;
 }

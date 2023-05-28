@@ -34,8 +34,6 @@ public class EventServiceImpl implements EventService {
             return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(eventDto))), HttpStatus.CREATED);
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Event does not saved");
-        }catch (DataIntegrityViolationException e){
-            throw new Duplicate("Event already exists");
         }
     }
 
