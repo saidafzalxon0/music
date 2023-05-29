@@ -6,9 +6,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import uz.java.music.entity.File;
 
+import java.util.List;
+
 public interface FileRepository extends JpaRepository<File,Long> {
 
     @Modifying
     @Query("DELETE FROM File f WHERE f.id = :id")
     void deleteFile(@Param("id") Long id);
+
+    List<File> findAllByExt(String name);
 }

@@ -50,7 +50,8 @@ public class FileServiceImpl implements FileService {
         File file = null;
         try {
             file = convertMultipartToFile(multipartFile,name);
-            PutObjectResult put = amazon.putObject(bucket_name,name,file);
+            amazon.putObject(bucket_name,name,file);
+            file.delete();
             entity = uz.java.music.entity.File.builder().link("https://" + amazon.getUrl(bucket_name,name).getHost()+amazon.getUrl(bucket_name,name).getFile()).ext(multipartFile.getOriginalFilename().substring(ext+1)).build();
             entity = repository.save(entity);
         } catch (IOException e) {
@@ -59,6 +60,14 @@ public class FileServiceImpl implements FileService {
         return new ResponseEntity<>(mapper.toDto(entity), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<List<FileDto>> search(String ext) {
+        try {
+            return new ResponseEntity<>(repository.findAllByExt(ext).stream().map(mapper::toDto).toList(), HttpStatus.OK);
+        } catch (InvalidDataAccessResourceUsageException e) {
+            throw new NotSaved("Database not connected");
+        }
+    }
 
 
     @Override

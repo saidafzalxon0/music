@@ -32,6 +32,11 @@ public record FileRest(FileService service) {
         return service.getAll();
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<FileDto>> getAll(@RequestParam String ext){
+        return service.search(ext);
+    }
+
 
 
 }

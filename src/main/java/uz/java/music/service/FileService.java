@@ -13,6 +13,8 @@ public interface FileService {
 
     ResponseEntity<FileDto> add(MultipartFile multipartFile);
 
+    ResponseEntity<List<FileDto>> search(String ext);
+
 
     ResponseEntity<FileDto> delete(Long id);
 
