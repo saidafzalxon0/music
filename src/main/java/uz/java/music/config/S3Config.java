@@ -18,8 +18,6 @@ public class S3Config {
     @Value("${secret}")
     private String secret_key;
 
-    @Value("${bucketName}")
-    private String bucket_name;
 
     @Value("${region}")
     private String region;
