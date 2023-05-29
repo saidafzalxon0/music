@@ -14,6 +14,7 @@
 	<name>music</name>
 	<description>Project for music school</description>
 	<properties>
+		<start-class>uz.java.music.MusicApplication</start-class>
 		<java.version>17</java.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<org.projectlombok.version>1.18.28</org.projectlombok.version>
@@ -95,7 +96,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
+					<mainClass>uz.java.music.MusicApplication</mainClass>
+					<layout>JAR</layout>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
