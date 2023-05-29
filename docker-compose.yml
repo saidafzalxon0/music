@@ -21,9 +21,9 @@ services:
       db-url: jdbc:postgresql://postgres:5432/music
       db-username: postgres
       db-password: postgres
-      accessKey: AKIAU3ABYX5ZQS2EENHY
-      secret: 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
-      bucketName: musicspringboot
+      accessKey: AKIAU3ABYX5ZSMG5RAOO
+      secret: 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
+      bucketName: musicspring
       region: us-east-1
     depends_on:
       - postgres

@@ -34,12 +34,12 @@ public record DepartmentDetailRest(DepartmentDetailService service) {
         return service.getById(id);
     }
 
-    @GetMapping("/{subid}")
-    private ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(@PathVariable Long subid){
+    @GetMapping("/getsub")
+    private ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(@RequestParam("subid") Long subid){
         return service.getSubjectAndDirection(subid);
     }
-    @GetMapping("{empid}")
-    private ResponseEntity<List<DepartmentEmployeeDto>> getEmployee(@PathVariable Long empid){
+    @GetMapping("/getemp")
+    private ResponseEntity<List<DepartmentEmployeeDto>> getEmployee(@RequestParam Long empid){
         return service.getDepartmentEmployee(empid);
     }
     @DeleteMapping("/{id}")
