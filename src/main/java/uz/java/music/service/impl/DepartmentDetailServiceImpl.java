@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.java.music.dto.DepartmentDetailDto;
+import uz.java.music.dto.DepartmentEmployeeDto;
 import uz.java.music.dto.SubjectAndDirectionDto;
 import uz.java.music.entity.Department;
 import uz.java.music.entity.DepartmentDetail;
@@ -98,6 +99,22 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
             throw new NotFound("Id not found");
         }
         List<SubjectAndDirectionDto> byId = repository.getSubjectAndDirection(id);
+        if (byId.isEmpty()) {
+            throw new NotFound("Id is empty");
+        }
+        try {
+            return ResponseEntity.ok(byId);
+        } catch (Exception e){
+            throw new NotFound("Id is not available");
+        }
+    }
+
+    @Override
+    public ResponseEntity<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id) {
+        if (id == null) {
+            throw new NotFound("Id not found");
+        }
+        List<DepartmentEmployeeDto> byId = repository.getDepartmentEmployee(id);
         if (byId.isEmpty()) {
             throw new NotFound("Id is empty");
         }

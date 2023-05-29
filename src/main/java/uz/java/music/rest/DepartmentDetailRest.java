@@ -5,12 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.java.music.dto.AspirantDto;
 import uz.java.music.dto.DepartmentDetailDto;
+import uz.java.music.dto.DepartmentEmployeeDto;
 import uz.java.music.dto.SubjectAndDirectionDto;
 import uz.java.music.service.DepartmentDetailService;
 import uz.java.music.service.DepartmentService;
 
 import java.util.List;
 
+@RestController
+@RequestMapping("/department_detail")
 public record DepartmentDetailRest(DepartmentDetailService service) {
 
     @PostMapping
@@ -31,9 +34,13 @@ public record DepartmentDetailRest(DepartmentDetailService service) {
         return service.getById(id);
     }
 
-    @GetMapping("/{ids}")
-    private ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(@PathVariable Long id){
-        return service.getSubjectAndDirection(id);
+    @GetMapping("/{subid}")
+    private ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(@PathVariable Long subid){
+        return service.getSubjectAndDirection(subid);
+    }
+    @GetMapping("{empid}")
+    private ResponseEntity<List<DepartmentEmployeeDto>> getEmployee(@PathVariable Long empid){
+        return service.getDepartmentEmployee(empid);
     }
     @DeleteMapping("/{id}")
     private ResponseEntity<DepartmentDetailDto> delete(@PathVariable Long id){

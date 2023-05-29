@@ -3,6 +3,7 @@ package uz.java.music.service;
 import org.springframework.http.ResponseEntity;
 import uz.java.music.dto.DepartmentDetailDto;
 import uz.java.music.dto.DepartmentDto;
+import uz.java.music.dto.DepartmentEmployeeDto;
 import uz.java.music.dto.SubjectAndDirectionDto;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface DepartmentDetailService {
     ResponseEntity<DepartmentDetailDto> delete(Long id);
 
     ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(Long id);
+
+    ResponseEntity<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id);
 }
