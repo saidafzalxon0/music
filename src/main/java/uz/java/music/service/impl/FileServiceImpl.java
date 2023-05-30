@@ -71,18 +71,16 @@ public class FileServiceImpl implements FileService {
 
 
     @Override
+    @Transactional
     public ResponseEntity<FileDto> delete(Long id) {
         Optional<uz.java.music.entity.File> optional = repository.findById(id);
-        if(optional.isPresent()){
-            try{
-                amazon.deleteObject(bucket_name,optional.get().getLink().substring(optional.get().getLink().lastIndexOf("/")+1));
-                repository.deleteFile(id);
-                return new ResponseEntity<>(mapper.toDto(optional.get()),HttpStatus.OK);
-            }catch (Exception e){
-                throw new NotSaved(e.getMessage());
-            }
+        if (optional.isPresent()) {
+            amazon.deleteObject(bucket_name, optional.get().getLink().substring(optional.get().getLink().lastIndexOf("/") + 1));
+            repository.deleteFile(id);
+            return new ResponseEntity<>(mapper.toDto(optional.get()), HttpStatus.OK);
+
         }else{
-            throw new NotFound("File is not found");
+            throw new NotFound("File not found");
         }
     }
 

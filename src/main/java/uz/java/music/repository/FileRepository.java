@@ -13,7 +13,7 @@ import java.util.List;
 public interface FileRepository extends JpaRepository<File,Long> {
 
     @Modifying
-    @Query("DELETE FROM File f WHERE f.id = :id")
+    @Query(value = "DELETE FROM File f WHERE f.id = :id",nativeQuery = true)
     void deleteFile(@Param("id") Long id);
 
     List<File> findAllByExt(String name);
