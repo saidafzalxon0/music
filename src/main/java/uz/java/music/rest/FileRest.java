@@ -17,8 +17,8 @@ import java.util.List;
 public record FileRest(FileService service) {
 
 
-    @PostMapping
-    public ResponseEntity<FileDto> add(@Valid @RequestBody MultipartFile file){
+    @PostMapping(consumes = "multipart/form-data")
+    public ResponseEntity<FileDto> add(@RequestParam("file") MultipartFile file){
         return service.add(file);
     }
 
@@ -32,7 +32,7 @@ public record FileRest(FileService service) {
         return service.getAll();
     }
 
-    @GetMapping("/search")
+    @GetMapping(value = "/search")
     public ResponseEntity<List<FileDto>> getAll(@RequestParam String ext){
         return service.search(ext);
     }
