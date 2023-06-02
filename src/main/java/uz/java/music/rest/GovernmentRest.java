@@ -1,5 +1,6 @@
 package uz.java.music.rest;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
@@ -14,16 +15,19 @@ import java.util.List;
 @RequestMapping("/government")
 public record GovernmentRest(Government_serviceService service) {
     @PostMapping
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Government_serviceDto> add(@Valid @RequestBody Government_serviceDto dto) {
         return service.add(dto);
     }
 
     @PutMapping
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Government_serviceDto> update_username(@RequestParam("id") @NotNull(message = "Government service id not found") Long id, @RequestParam("link") @NotNull(message = "Government service link not found") String link){
         return service.update_link(id,link);
     }
 
     @PatchMapping
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Government_serviceDto> update(@Valid @RequestBody Government_serviceDto dto) {
         return service.update(dto);
     }
@@ -34,6 +38,7 @@ public record GovernmentRest(Government_serviceService service) {
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<Government_serviceDto> delete(@NotNull @PathVariable Long id) {
         return service.delete(id);
     }

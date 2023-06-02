@@ -1,5 +1,6 @@
 package uz.java.music.rest;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,12 @@ import java.util.List;
 @RequestMapping("/employee")
 public record EmployeeRest(EmployeeService service) {
     @PostMapping
+    @SecurityRequirement(name = "Authorization")
     private ResponseEntity<EmployeeDto> add(@Valid @RequestBody EmployeeDto dto){
         return service.add(dto);
     }
     @PatchMapping
+    @SecurityRequirement(name = "Authorization")
     private ResponseEntity<EmployeeDto> update(@RequestBody EmployeeDto dto){
         return service.update(dto);
     }
@@ -29,6 +32,7 @@ public record EmployeeRest(EmployeeService service) {
         return service.getById(id);
     }
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Authorization")
     private ResponseEntity<EmployeeDto> delete(@PathVariable Long id){
         return service.delete(id);
     }

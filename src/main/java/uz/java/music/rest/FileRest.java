@@ -1,5 +1,6 @@
 package uz.java.music.rest;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,13 @@ public record FileRest(FileService service) {
 
 
     @PostMapping(consumes = "multipart/form-data")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<FileDto> add(@RequestParam("file") MultipartFile file){
         return service.add(file);
     }
 
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<FileDto> delete(@NotNull @PathVariable Long id) {
         return service.delete(id);
     }

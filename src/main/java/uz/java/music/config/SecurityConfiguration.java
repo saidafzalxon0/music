@@ -1,5 +1,8 @@
 package uz.java.music.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@SecurityScheme(name = "Authorization",
+        in = SecuritySchemeIn.HEADER,
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT")
 public class SecurityConfiguration {
 
     @Autowired
@@ -34,6 +42,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests()
                 .requestMatchers("/admin/sign-in/**")
                 .permitAll()
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**","/swagger-ui.html").permitAll()
                 .requestMatchers(HttpMethod.GET, "/**")
                 .permitAll()
                 .anyRequest()
