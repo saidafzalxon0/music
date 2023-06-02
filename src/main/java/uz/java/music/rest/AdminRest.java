@@ -43,7 +43,6 @@ public record AdminRest(AdminService adminService) {
     }
 
     @GetMapping()
-    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<List<AdminDto>> getAll() {
         return adminService.getAll();
     }

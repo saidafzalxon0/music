@@ -21,10 +21,12 @@ services:
       db-url: jdbc:postgresql://postgres:5432/music
       db-username: postgres
       db-password: postgres
-      accessKey: AKIAU3ABYX5ZSMG5RAOO
-      secret: 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
-      bucketName: musicspring
-      region: us-east-1
+      spring.security.secret.key: 25432A462D4A614E645267556B58703273357638792F413F4428472B4B625065
+      accessKey: you_access_key
+      secret: your_secret_key
+      bucketName: your_bucket_name
+      region: your_bucket_region us-east-1
+
     depends_on:
       - postgres
     restart: unless-stopped
