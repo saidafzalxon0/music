@@ -5,9 +5,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.java.music.config.JwtService;
 import uz.java.music.dto.AdminDto;
 import uz.java.music.entity.Admin;
 import uz.java.music.exception.Duplicate;
@@ -17,6 +20,7 @@ import uz.java.music.repository.AdminRepository;
 import uz.java.music.service.AdminService;
 import uz.java.music.service.mapper.AdminMapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +32,21 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private JwtService service;
+    @Autowired
     private AdminMapper mapper;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Override
+    public ResponseEntity<String> signIn(String username, String password) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
+        var user = repository.findFirstByUsername(username).orElseThrow();
+        var jwt = service.generateToken(user);
+        return new ResponseEntity<>(jwt, HttpStatus.OK);
+    }
+
     @Override
     public ResponseEntity<AdminDto> add(AdminDto adminDto) {
         try{

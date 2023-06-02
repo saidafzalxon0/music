@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.java.music.entity.Admin;
 
+import java.util.Optional;
+
 @Repository
 public interface AdminRepository extends JpaRepository<Admin,Long> {
     @Modifying
@@ -19,4 +21,5 @@ public interface AdminRepository extends JpaRepository<Admin,Long> {
     @Modifying
     @Query("DELETE FROM Admin a WHERE a.id = :id")
     void deleteAdmin(@Param("id") Long id);
+    Optional<Admin> findFirstByUsername(String username);
 }

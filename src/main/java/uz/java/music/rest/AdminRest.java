@@ -13,11 +13,16 @@ import java.util.List;
 @RequestMapping("/admin")
 public record AdminRest(AdminService adminService) {
 
-    @PostMapping
+
+    @PostMapping("/sign-up")
     public ResponseEntity<AdminDto> add(@Valid @RequestBody AdminDto adminDto) {
         return adminService.add(adminDto);
     }
 
+    @PostMapping("/sign-in")
+    public ResponseEntity<String> signIn(@NotNull @RequestParam  String username,@NotNull @RequestParam String password){
+        return adminService.signIn(username,password);
+    }
     @PutMapping("/username")
     public ResponseEntity<AdminDto> update_username(@RequestParam("id") @NotNull(message = "Admin id not found") Long id,@RequestParam("username") @NotNull(message = "Admin username not found") String username){
         return adminService.update_username(id,username);

@@ -5,9 +5,12 @@ import org.springframework.transaction.annotation.Transactional;
 import uz.java.music.dto.AdminDto;
 import uz.java.music.entity.Admin;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface AdminService {
+
+    ResponseEntity<String> signIn(String username,String password);
 
     ResponseEntity<AdminDto> add(AdminDto adminDto);
 
