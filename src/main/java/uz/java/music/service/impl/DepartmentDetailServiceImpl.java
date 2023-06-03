@@ -98,7 +98,7 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
         }
         List<SubjectAndDirectionDto> byId = repository.getSubjectAndDirection(id);
         if (byId.isEmpty()) {
-            throw new NotFound("Id is empty");
+            throw new NotFound("Data is empty");
         }
         try {
             return  ResponseDto.<List<SubjectAndDirectionDto>>builder().data(byId).status("success").build();
@@ -114,7 +114,7 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
         }
         List<DepartmentEmployeeDto> byId = repository.getDepartmentEmployee(id);
         if (byId.isEmpty()) {
-            throw new NotFound("Id is empty");
+            throw new NotFound("Data is empty");
         }
         try {
             return ResponseDto.<List<DepartmentEmployeeDto>>builder().data(byId).status("success").build();
