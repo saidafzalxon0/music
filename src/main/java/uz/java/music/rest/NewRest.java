@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.java.music.dto.NewDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.service.NewService;
 
 import java.util.List;
@@ -15,26 +16,26 @@ import java.util.List;
 public record NewRest(NewService service) {
     @PostMapping
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<NewDto> add(@Valid @RequestBody NewDto dto){
+    private ResponseDto<NewDto> add(@Valid @RequestBody NewDto dto){
         return service.add(dto);
     }
     @PatchMapping
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<NewDto> update(@RequestBody NewDto dto){
+    private ResponseDto<NewDto> update(@RequestBody NewDto dto){
         return service.update(dto);
     }
 
     @GetMapping("/all")
-    private ResponseEntity<List<NewDto>> getAll(){
+    private ResponseDto<List<NewDto>> getAll(){
         return service.getAll();
     }
     @GetMapping("/{id}")
-    private ResponseEntity<NewDto> getById(@PathVariable Long id){
+    private ResponseDto<NewDto> getById(@PathVariable Long id){
         return service.getById(id);
     }
     @DeleteMapping("/{id}")
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<NewDto> delete(@PathVariable Long id){
+    private ResponseDto<NewDto> delete(@PathVariable Long id){
         return service.delete(id);
     }
 }

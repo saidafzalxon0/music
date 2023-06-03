@@ -8,7 +8,9 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import uz.java.music.dto.DepartmentDto;
 import uz.java.music.dto.DirectionDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.entity.Direction;
 import uz.java.music.exception.Duplicate;
 import uz.java.music.exception.NotFound;
@@ -29,9 +31,9 @@ public class DirectionServiceImpl implements DirectionService {
     private final DirectionRepository repository;
 
     @Override
-    public ResponseEntity<DirectionDto> create(DirectionDto directionDto) {
+    public ResponseDto<DirectionDto> create(DirectionDto directionDto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(directionDto))), HttpStatus.CREATED);
+            return ResponseDto.<DirectionDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(directionDto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Direction not saved");
         }catch (DataIntegrityViolationException e){
@@ -40,13 +42,13 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public ResponseEntity<List<DirectionDto>> getAll() {
+    public ResponseDto<List<DirectionDto>> getAll() {
         List<DirectionDto> directionList = repository.findAll().stream().map(mapper::toDto).toList();
-        return ResponseEntity.ok(directionList);
+        return ResponseDto.<List<DirectionDto>>builder().data(directionList).status("success").build();
     }
 
     @Override
-    public ResponseEntity<DirectionDto> getById(Long direction_id) {
+    public ResponseDto<DirectionDto> getById(Long direction_id) {
         if (direction_id == null) {
             throw new NotFound("Id is null");
         }
@@ -55,7 +57,7 @@ public class DirectionServiceImpl implements DirectionService {
             throw new NotFound("Id is empty");
         }
         try {
-            return ResponseEntity.ok(mapper.toDto(byId.get()));
+            return ResponseDto.<DirectionDto>builder().data(mapper.toDto(byId.get())).status("success").build();
         } catch (Exception e) {
             throw new NotFound("Id does not available");
 
@@ -63,12 +65,12 @@ public class DirectionServiceImpl implements DirectionService {
     }
 
     @Override
-    public ResponseEntity<DirectionDto> edit(DirectionDto directionDto) {
+    public ResponseDto<DirectionDto> edit(DirectionDto directionDto) {
         if(directionDto.getId() == null){
             throw new NotFound("Direction is not found");
         }else {
             if (repository.findById(directionDto.getId()).isPresent()) {
-                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(directionDto))), HttpStatus.OK);
+                return ResponseDto.<DirectionDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(directionDto)))).status("success").build();
             }else {
                 throw new NotSaved("Partner has not been updated");
             }
@@ -77,12 +79,12 @@ public class DirectionServiceImpl implements DirectionService {
 
     @Override
     @Transactional
-    public ResponseEntity<DirectionDto> delete(Long direction_id) {
+    public ResponseDto<DirectionDto> delete(Long direction_id) {
         Optional<Direction> direction = repository.findById(direction_id);
         if(direction.isPresent()){
             try{
                 repository.deleteDirection(direction_id);
-                return new ResponseEntity<>(mapper.toDto(direction.get()),HttpStatus.OK);
+                return ResponseDto.<DirectionDto>builder().data(mapper.toDto(direction.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("Direction not deleted");
             }

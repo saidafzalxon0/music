@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.java.music.dto.FileDto;
 import uz.java.music.dto.Government_serviceDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.entity.Admin;
 import uz.java.music.entity.Government_service;
 import uz.java.music.exception.Duplicate;
@@ -29,9 +31,9 @@ public class Government_serviceServiceImpl implements Government_serviceService 
     @Autowired
     private GovernmentMapper mapper;
     @Override
-    public ResponseEntity<Government_serviceDto> add(Government_serviceDto serviceDto) {
+    public ResponseDto<Government_serviceDto> add(Government_serviceDto serviceDto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(serviceDto))), HttpStatus.CREATED);
+            return ResponseDto.<Government_serviceDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(serviceDto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Government service not saved");
         }catch (DataIntegrityViolationException e){
@@ -40,13 +42,13 @@ public class Government_serviceServiceImpl implements Government_serviceService 
     }
 
     @Override
-    public ResponseEntity<Government_serviceDto> update(Government_serviceDto serviceDto) {
+    public ResponseDto<Government_serviceDto> update(Government_serviceDto serviceDto) {
             if(serviceDto.getId() == null){
                 throw new NotFound("Government service is not found");
             }else {
                 if (repository.findById(serviceDto.getId()).isPresent()) {
                     //TODO file servise tekshirish qo'shish kerak.
-                    return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(serviceDto))), HttpStatus.OK);
+                    return ResponseDto.<Government_serviceDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(serviceDto)))).status("success").build();
                 } else {
                     throw new NotSaved("Government service not updated");
                 }
@@ -54,12 +56,12 @@ public class Government_serviceServiceImpl implements Government_serviceService 
     }
     @Transactional
     @Override
-    public ResponseEntity<Government_serviceDto> update_link(Long id, String link) {
+    public ResponseDto<Government_serviceDto> update_link(Long id, String link) {
         try{
             repository.updateLink(id,link);
             Optional<Government_service> service = repository.findById(id);
             if(service.isPresent()){
-                return new ResponseEntity<>(mapper.toDto(service.get()),HttpStatus.OK);
+                return ResponseDto.<Government_serviceDto>builder().data(mapper.toDto(service.get())).status("success").build();
             }else{
                 throw new NotSaved("Government service name not updated");
             }
@@ -69,21 +71,21 @@ public class Government_serviceServiceImpl implements Government_serviceService 
     }
 
     @Override
-    public ResponseEntity<List<Government_serviceDto>> getAll() {
+    public ResponseDto<List<Government_serviceDto>> getAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return ResponseDto.<List<Government_serviceDto>>builder().data(repository.findAll().stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Database not connected");
         }
     }
     @Transactional
     @Override
-    public ResponseEntity<Government_serviceDto> delete(Long id) {
+    public ResponseDto<Government_serviceDto> delete(Long id) {
         Optional<Government_service> service = repository.findById(id);
         if(service.isPresent()){
             try{
                 repository.deleteAdmin(id);
-                return new ResponseEntity<>(mapper.toDto(service.get()),HttpStatus.OK);
+                return ResponseDto.<Government_serviceDto>builder().data(mapper.toDto(service.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("Government service not deleted");
             }

@@ -6,9 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.java.music.dto.DepartmentDetailDto;
-import uz.java.music.dto.DepartmentEmployeeDto;
-import uz.java.music.dto.SubjectAndDirectionDto;
+import uz.java.music.dto.*;
 import uz.java.music.entity.Department;
 import uz.java.music.entity.DepartmentDetail;
 import uz.java.music.exception.NotFound;
@@ -29,9 +27,9 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
     @Autowired
     private DepartmentDetailMapper mapper;
     @Override
-    public ResponseEntity<DepartmentDetailDto> add(DepartmentDetailDto dto) {
+    public ResponseDto<DepartmentDetailDto> add(DepartmentDetailDto dto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(dto))), HttpStatus.CREATED);
+            return  ResponseDto.<DepartmentDetailDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(dto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("DepartmentDetail not saved");
         }catch (Exception e){
@@ -40,12 +38,12 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
     }
 
     @Override
-    public ResponseEntity<DepartmentDetailDto> update(DepartmentDetailDto dto) {
+    public ResponseDto<DepartmentDetailDto> update(DepartmentDetailDto dto) {
         if(dto.getId() == null){
             throw new NotFound("DepartmentDetail is not found");
         }else {
             if (repository.findById(dto.getId()).isPresent()) {
-                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(dto))), HttpStatus.OK);
+                return  ResponseDto.<DepartmentDetailDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(dto)))).status("success").build();
             } else {
                 throw new NotSaved("DepartmentDetail not updated");
             }
@@ -53,16 +51,16 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
     }
 
     @Override
-    public ResponseEntity<List<DepartmentDetailDto>> getAll() {
+    public ResponseDto<List<DepartmentDetailDto>> getAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return  ResponseDto.<List<DepartmentDetailDto>>builder().data(repository.findAll().stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Database not connected");
         }
     }
 
     @Override
-    public ResponseEntity<List<DepartmentDetailDto>> getById(Long id) {
+    public ResponseDto<List<DepartmentDetailDto>> getById(Long id) {
         if (id == null) {
             throw new NotFound("Id not found");
         }
@@ -71,7 +69,7 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
             throw new NotFound("Id is empty");
         }
         try {
-            return ResponseEntity.ok(byId.stream().map(mapper::toDto).toList());
+            return  ResponseDto.<List<DepartmentDetailDto>>builder().data(byId.stream().map(mapper::toDto).toList()).status("success").build();
         } catch (Exception e){
             throw new NotFound("Id is not available");
         }
@@ -79,12 +77,12 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
 
     @Override
     @Transactional
-    public ResponseEntity<DepartmentDetailDto> delete(Long id) {
+    public ResponseDto<DepartmentDetailDto> delete(Long id) {
         Optional<DepartmentDetail> admin = repository.findById(id);
         if(admin.isPresent()){
             try{
                 repository.deleteDepartmentDetail(id);
-                return new ResponseEntity<>(mapper.toDto(admin.get()),HttpStatus.OK);
+                return ResponseDto.<DepartmentDetailDto>builder().data(mapper.toDto(admin.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("DepartmentDetail not deleted");
             }
@@ -94,7 +92,7 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
     }
 
     @Override
-    public ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(Long id) {
+    public ResponseDto<List<SubjectAndDirectionDto>> getSubjectAndDirection(Long id) {
         if (id == null) {
             throw new NotFound("Id not found");
         }
@@ -103,14 +101,14 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
             throw new NotFound("Id is empty");
         }
         try {
-            return ResponseEntity.ok(byId);
+            return  ResponseDto.<List<SubjectAndDirectionDto>>builder().data(byId).status("success").build();
         } catch (Exception e){
             throw new NotFound("Id is not available");
         }
     }
 
     @Override
-    public ResponseEntity<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id) {
+    public ResponseDto<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id) {
         if (id == null) {
             throw new NotFound("Id not found");
         }
@@ -119,7 +117,7 @@ public class DepartmentDetailServiceImpl implements DepartmentDetailService {
             throw new NotFound("Id is empty");
         }
         try {
-            return ResponseEntity.ok(byId);
+            return ResponseDto.<List<DepartmentEmployeeDto>>builder().data(byId).status("success").build();
         } catch (Exception e){
             throw new NotFound("Id is not available");
         }

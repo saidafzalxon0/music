@@ -3,17 +3,18 @@ package uz.java.music.service;
 import org.springframework.http.ResponseEntity;
 import uz.java.music.dto.AdminDto;
 import uz.java.music.dto.AspirantDto;
+import uz.java.music.dto.ResponseDto;
 
 import java.util.List;
 
 public interface AspirantService {
-    ResponseEntity<AspirantDto> add(AspirantDto dto);
+    ResponseDto<AspirantDto> add(AspirantDto dto);
 
-    ResponseEntity<AspirantDto> update(AspirantDto aspirantDto);
+    ResponseDto<AspirantDto> update(AspirantDto aspirantDto);
 
-    ResponseEntity<List<AspirantDto>> getAll();
+    ResponseDto<List<AspirantDto>> getAll();
 
-    ResponseEntity<AspirantDto> getById(Long id);
+    ResponseDto<AspirantDto> getById(Long id);
 
-    ResponseEntity<AspirantDto> delete(Long id);
+    ResponseDto<AspirantDto> delete(Long id);
 }

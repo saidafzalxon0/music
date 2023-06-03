@@ -8,7 +8,9 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import uz.java.music.dto.EmployeeDto;
 import uz.java.music.dto.EventDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.entity.Event;
 import uz.java.music.entity.Subject;
 import uz.java.music.exception.Duplicate;
@@ -29,25 +31,25 @@ public class EventServiceImpl implements EventService {
     private final EventRepository repository;
 
     @Override
-    public ResponseEntity<EventDto> create(EventDto eventDto) {
+    public ResponseDto<EventDto> create(EventDto eventDto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(eventDto))), HttpStatus.CREATED);
+            return ResponseDto.<EventDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(eventDto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Event does not saved");
         }
     }
 
     @Override
-    public ResponseEntity<List<EventDto>> getAll() {
+    public ResponseDto<List<EventDto>> getAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return ResponseDto.<List<EventDto>>builder().data(repository.findAll().stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("No database connection");
         }
     }
 
     @Override
-    public ResponseEntity<EventDto> getById(Long event_id) {
+    public ResponseDto<EventDto> getById(Long event_id) {
         if (event_id == null) {
             throw new NotFound("Id is null");
         }
@@ -56,19 +58,19 @@ public class EventServiceImpl implements EventService {
             throw new NotFound("Id is empty");
         }
         try {
-            return ResponseEntity.ok(mapper.toDto(byId.get()));
+            return ResponseDto.<EventDto>builder().data(mapper.toDto(byId.get())).status("success").build();
         } catch (Exception e){
             throw new NotFound("Id is not available");
         }
     }
 
     @Override
-    public ResponseEntity<EventDto> edit(EventDto eventDto) {
+    public ResponseDto<EventDto> edit(EventDto eventDto) {
         if(eventDto.getId() == null){
             throw new NotFound("Event is not found");
         }else {
             if (repository.findById(eventDto.getId()).isPresent()) {
-                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(eventDto))), HttpStatus.OK);
+                return ResponseDto.<EventDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(eventDto)))).status("success").build();
             } else {
                 throw new NotSaved("Event not updated");
             }
@@ -77,12 +79,12 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public ResponseEntity<EventDto> delete(Long event_id) {
+    public ResponseDto<EventDto> delete(Long event_id) {
         Optional<Event> subject = repository.findById(event_id);
         if(subject.isPresent()){
             try{
                 repository.deleteEvent(event_id);
-                return new ResponseEntity<>(mapper.toDto(subject.get()),HttpStatus.OK);
+                return ResponseDto.<EventDto>builder().data(mapper.toDto(subject.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("Event has not been deleted");
             }

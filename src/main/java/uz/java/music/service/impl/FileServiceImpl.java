@@ -13,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uz.java.music.dto.EventDto;
 import uz.java.music.dto.FileDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.entity.Aspirant;
 import uz.java.music.exception.NotFound;
 import uz.java.music.exception.NotSaved;
@@ -42,7 +44,7 @@ public class FileServiceImpl implements FileService {
     private FileMapper mapper;
     @Override
     @Transactional
-    public ResponseEntity<FileDto> add(MultipartFile multipartFile) {
+    public ResponseDto<FileDto> add(MultipartFile multipartFile) {
         String name = String.valueOf(UUID.randomUUID());
         int ext = multipartFile.getOriginalFilename().lastIndexOf(".");
         name += multipartFile.getOriginalFilename().substring(ext);
@@ -57,13 +59,13 @@ public class FileServiceImpl implements FileService {
         } catch (IOException e) {
            new NotSaved(e.getMessage());
         }
-        return new ResponseEntity<>(mapper.toDto(entity), HttpStatus.OK);
+        return ResponseDto.<FileDto>builder().data(mapper.toDto(entity)).status("success").build();
     }
 
     @Override
-    public ResponseEntity<List<FileDto>> search(String ext) {
+    public ResponseDto<List<FileDto>> search(String ext) {
         try {
-            return new ResponseEntity<>(repository.findAllByExt(ext).stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return ResponseDto.<List<FileDto>>builder().data(repository.findAllByExt(ext).stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Database not connected");
         }
@@ -72,12 +74,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public ResponseEntity<FileDto> delete(Long id) {
+    public ResponseDto<FileDto> delete(Long id) {
         Optional<uz.java.music.entity.File> optional = repository.findById(id);
         if (optional.isPresent()) {
             amazon.deleteObject(bucket_name, optional.get().getLink().substring(optional.get().getLink().lastIndexOf("/") + 1));
             repository.deleteFile(id);
-            return new ResponseEntity<>(mapper.toDto(optional.get()), HttpStatus.OK);
+            return ResponseDto.<FileDto>builder().data(mapper.toDto(optional.get())).status("success").build();
 
         }else{
             throw new NotFound("File not found");
@@ -85,9 +87,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public ResponseEntity<List<FileDto>> getAll() {
+    public ResponseDto<List<FileDto>> getAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return ResponseDto.<List<FileDto>>builder().data(repository.findAll().stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Database not connected");
         }

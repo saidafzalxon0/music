@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.java.music.config.JwtService;
 import uz.java.music.dto.AdminDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.entity.Admin;
 import uz.java.music.exception.Duplicate;
 import uz.java.music.exception.NotFound;
@@ -40,17 +41,17 @@ public class AdminServiceImpl implements AdminService {
     private AuthenticationManager authenticationManager;
 
     @Override
-    public ResponseEntity<String> signIn(String username, String password) {
+    public ResponseDto<String> signIn(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
         var user = repository.findFirstByUsername(username).orElseThrow();
         var jwt = service.generateToken(user);
-        return new ResponseEntity<>(jwt, HttpStatus.OK);
+        return ResponseDto.<String>builder().status("success").data(jwt).build();
     }
 
     @Override
-    public ResponseEntity<AdminDto> add(AdminDto adminDto) {
+    public ResponseDto<AdminDto> add(AdminDto adminDto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(adminDto))), HttpStatus.CREATED);
+            return ResponseDto.<AdminDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(adminDto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Admin not saved");
         }catch (DataIntegrityViolationException e){
@@ -59,12 +60,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<AdminDto> update(AdminDto adminDto) {
+    public ResponseDto<AdminDto> update(AdminDto adminDto) {
         if(adminDto.getId() == null){
             throw new NotFound("Admin is not found");
         }else {
             if (repository.findById(adminDto.getId()).isPresent()) {
-                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(adminDto))), HttpStatus.OK);
+                return ResponseDto.<AdminDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(adminDto)))).status("success").build();
             } else {
                 throw new NotSaved("Admin not updated");
             }
@@ -72,12 +73,12 @@ public class AdminServiceImpl implements AdminService {
     }
     @Transactional
     @Override
-    public ResponseEntity<AdminDto> update_username(Long id, String username) {
+    public ResponseDto<AdminDto> update_username(Long id, String username) {
         try{
             repository.updateUsername(id,username);
             Optional<Admin> admin = repository.findById(id);
             if(admin.isPresent()){
-                return new ResponseEntity<>(mapper.toDto(admin.get()),HttpStatus.OK);
+                return ResponseDto.<AdminDto>builder().data(mapper.toDto(admin.get())).status("success").build();
             }else{
                 throw new NotSaved("Admin username not updated");
             }
@@ -90,7 +91,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Transactional
     @Override
-    public ResponseEntity<AdminDto> update_password(Long id, String old_password, String password) {
+    public ResponseDto<AdminDto> update_password(Long id, String old_password, String password) {
         try{
             Optional<Admin> admin = repository.findById(id);
             if(admin.isPresent()){
@@ -100,7 +101,7 @@ public class AdminServiceImpl implements AdminService {
                     repository.updatePassword(id,passwordEncoder.encode(password));
                     admin = repository.findById(id);
                     if(admin.isPresent()){
-                        return new ResponseEntity<>(mapper.toDto(admin.get()),HttpStatus.OK);
+                        return ResponseDto.<AdminDto>builder().data(mapper.toDto(admin.get())).status("success").build();
                     }else{
                         throw new NotSaved("Admin not updated");
                     }
@@ -114,9 +115,9 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ResponseEntity<List<AdminDto>> getAll() {
+    public ResponseDto<List<AdminDto>> getAll() {
         try {
-            return new ResponseEntity<>(repository.findAll().stream().map(mapper::toDto).toList(), HttpStatus.OK);
+            return ResponseDto.<List<AdminDto>>builder().data(repository.findAll().stream().map(mapper::toDto).toList()).status("success").build();
         } catch (InvalidDataAccessResourceUsageException e) {
             throw new NotSaved("Database not connected");
         }
@@ -124,12 +125,12 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public ResponseEntity<AdminDto> delete(Long id) {
+    public ResponseDto<AdminDto> delete(Long id) {
         Optional<Admin> admin = repository.findById(id);
         if(admin.isPresent()){
             try{
                 repository.deleteAdmin(id);
-                return new ResponseEntity<>(mapper.toDto(admin.get()),HttpStatus.OK);
+                return ResponseDto.<AdminDto>builder().data(mapper.toDto(admin.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("Admin not deleted");
             }

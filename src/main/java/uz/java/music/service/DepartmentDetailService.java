@@ -1,25 +1,22 @@
 package uz.java.music.service;
 
 import org.springframework.http.ResponseEntity;
-import uz.java.music.dto.DepartmentDetailDto;
-import uz.java.music.dto.DepartmentDto;
-import uz.java.music.dto.DepartmentEmployeeDto;
-import uz.java.music.dto.SubjectAndDirectionDto;
+import uz.java.music.dto.*;
 
 import java.util.List;
 
 public interface DepartmentDetailService {
-    ResponseEntity<DepartmentDetailDto> add(DepartmentDetailDto dto);
+    ResponseDto<DepartmentDetailDto> add(DepartmentDetailDto dto);
 
-    ResponseEntity<DepartmentDetailDto> update(DepartmentDetailDto dto);
+    ResponseDto<DepartmentDetailDto> update(DepartmentDetailDto dto);
 
-    ResponseEntity<List<DepartmentDetailDto>> getAll();
+    ResponseDto<List<DepartmentDetailDto>> getAll();
 
-    ResponseEntity<List<DepartmentDetailDto>> getById(Long id);
+    ResponseDto<List<DepartmentDetailDto>> getById(Long id);
 
-    ResponseEntity<DepartmentDetailDto> delete(Long id);
+    ResponseDto<DepartmentDetailDto> delete(Long id);
 
-    ResponseEntity<List<SubjectAndDirectionDto>> getSubjectAndDirection(Long id);
+    ResponseDto<List<SubjectAndDirectionDto>> getSubjectAndDirection(Long id);
 
-    ResponseEntity<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id);
+    ResponseDto<List<DepartmentEmployeeDto>> getDepartmentEmployee(Long id);
 }

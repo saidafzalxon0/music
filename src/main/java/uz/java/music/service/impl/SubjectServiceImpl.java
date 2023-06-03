@@ -8,6 +8,8 @@ import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import uz.java.music.dto.PositionDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.dto.SubjectDto;
 import uz.java.music.entity.Direction;
 import uz.java.music.entity.Subject;
@@ -29,9 +31,9 @@ public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository repository;
 
     @Override
-    public ResponseEntity<SubjectDto> createSubject(SubjectDto subjectDto) {
+    public ResponseDto<SubjectDto> createSubject(SubjectDto subjectDto) {
         try{
-            return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(subjectDto))), HttpStatus.CREATED);
+            return ResponseDto.<SubjectDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(subjectDto)))).status("success").build();
         }catch (InvalidDataAccessResourceUsageException e){
             throw new NotSaved("Subject not saved");
         }catch (DataIntegrityViolationException e){
@@ -40,13 +42,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public ResponseEntity<List<SubjectDto>> getAll() {
+    public ResponseDto<List<SubjectDto>> getAll() {
         List<SubjectDto> subjectList = repository.findAll().stream().map(mapper::toDto).toList();
-        return ResponseEntity.ok(subjectList);
+        return ResponseDto.<List<SubjectDto>>builder().data(subjectList).status("success").build();
     }
 
     @Override
-    public ResponseEntity<SubjectDto> getSubjectById(Long subject_id) {
+    public ResponseDto<SubjectDto> getSubjectById(Long subject_id) {
         if (subject_id == null) {
             throw new NullPointerException("Id is null");
         }
@@ -55,19 +57,19 @@ public class SubjectServiceImpl implements SubjectService {
             throw new NullPointerException("Id is empty");
         }
         try {
-            return ResponseEntity.ok(mapper.toDto(byId.get()));
+            return ResponseDto.<SubjectDto>builder().data(mapper.toDto(byId.get())).status("success").build();
         } catch (Exception e){
             throw new NullPointerException("Id is not available");
         }
     }
 
     @Override
-    public ResponseEntity<SubjectDto> editSubject(SubjectDto subjectDto) {
+    public ResponseDto<SubjectDto> editSubject(SubjectDto subjectDto) {
         if(subjectDto.getId() == null){
             throw new NotFound("Subject is not found");
         }else {
             if (repository.findById(subjectDto.getId()).isPresent()) {
-                return new ResponseEntity<>(mapper.toDto(repository.save(mapper.toEntity(subjectDto))), HttpStatus.OK);
+                return ResponseDto.<SubjectDto>builder().data(mapper.toDto(repository.save(mapper.toEntity(subjectDto)))).status("success").build();
             }else {
                 throw new NotSaved("Subject has not been updated");
             }
@@ -76,12 +78,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public ResponseEntity<SubjectDto> deleteSubject(Long subject_id) {
+    public ResponseDto<SubjectDto> deleteSubject(Long subject_id) {
         Optional<Subject> subject = repository.findById(subject_id);
         if(subject.isPresent()){
             try{
                 repository.deleteSubject(subject_id);
-                return new ResponseEntity<>(mapper.toDto(subject.get()),HttpStatus.OK);
+                return ResponseDto.<SubjectDto>builder().data(mapper.toDto(subject.get())).status("success").build();
             }catch (Exception e){
                 throw new NotSaved("Subject has not been deleted");
             }

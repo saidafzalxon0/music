@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uz.java.music.dto.AspirantDto;
+import uz.java.music.dto.ResponseDto;
 import uz.java.music.service.AspirantService;
 
 import java.util.List;
@@ -15,26 +16,26 @@ public record AspirantRest(AspirantService service) {
 
     @PostMapping
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<AspirantDto> add(@Valid @RequestBody AspirantDto dto){
+    private ResponseDto<AspirantDto> add(@Valid @RequestBody AspirantDto dto){
         return service.add(dto);
     }
     @PatchMapping
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<AspirantDto> update(@RequestBody AspirantDto aspirantDto){
+    private ResponseDto<AspirantDto> update(@RequestBody AspirantDto aspirantDto){
         return service.update(aspirantDto);
     }
 
     @GetMapping("/all")
-    private ResponseEntity<List<AspirantDto>> getAll(){
+    private ResponseDto<List<AspirantDto>> getAll(){
        return service.getAll();
     }
     @GetMapping("/{id}")
-    private ResponseEntity<AspirantDto> getById(@PathVariable Long id){
+    private ResponseDto<AspirantDto> getById(@PathVariable Long id){
         return service.getById(id);
     }
     @DeleteMapping("/{id}")
     @SecurityRequirement(name = "Authorization")
-    private ResponseEntity<AspirantDto> delete(@PathVariable Long id){
+    private ResponseDto<AspirantDto> delete(@PathVariable Long id){
         return service.delete(id);
     }
 }

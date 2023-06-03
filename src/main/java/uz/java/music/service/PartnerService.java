@@ -2,16 +2,17 @@ package uz.java.music.service;
 
 import org.springframework.http.ResponseEntity;
 import uz.java.music.dto.PartnerDto;
+import uz.java.music.dto.ResponseDto;
 
 import java.util.List;
 
 public interface PartnerService {
-    ResponseEntity<PartnerDto> add(PartnerDto partnerDto);
+    ResponseDto<PartnerDto> add(PartnerDto partnerDto);
 
-    ResponseEntity<PartnerDto> update(PartnerDto partnerDto);
+    ResponseDto<PartnerDto> update(PartnerDto partnerDto);
 
-    ResponseEntity<List<PartnerDto>> getAll();
+    ResponseDto<List<PartnerDto>> getAll();
 
-    ResponseEntity<PartnerDto> delete(Long id);
+    ResponseDto<PartnerDto> delete(Long id);
 
 }
