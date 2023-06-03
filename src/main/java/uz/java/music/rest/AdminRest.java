@@ -22,8 +22,8 @@ public record AdminRest(AdminService adminService) {
     }
 
     @PostMapping("/sign-in")
-    public ResponseEntity<String> signIn(@NotNull @RequestParam  String username,@NotNull @RequestParam String password){
-        return adminService.signIn(username,password);
+    public ResponseEntity<String> signIn(@NotNull @RequestBody AdminDto adminDto){
+        return adminService.signIn(adminDto.getUsername(),adminDto.getPassword());
     }
     @PutMapping("/username")
     @SecurityRequirement(name = "Authorization")

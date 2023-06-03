@@ -19,6 +19,7 @@ public record FileRest(FileService service) {
 
 
     @PostMapping(consumes = "multipart/form-data")
+    @SecurityRequirement(name = "Authorization")
     public ResponseEntity<FileDto> add(@RequestParam("file") MultipartFile file){
         return service.add(file);
     }
