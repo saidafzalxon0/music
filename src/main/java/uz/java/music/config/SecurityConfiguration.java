@@ -35,10 +35,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(configurationSource());
         http
-                .csrf()
-                .disable()
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(configurationSource()))
                 .authorizeHttpRequests()
                 .requestMatchers("/admin/sign-in/**")
                 .permitAll()
